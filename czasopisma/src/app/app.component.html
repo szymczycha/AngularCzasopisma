@@ -1,0 +1,50 @@
+<div *ngIf="selectingCzasopismo">
+  <div *ngFor="let czasopismo of czasopisma; let i = index">
+    <img
+      (click)="selectCzasopismo(czasopismo)"
+      [src]="
+        'http://atarionline.pl/biblioteka/czasopisma/img/' +
+        xml.zmienne[czasopismo].src
+      "
+    />
+  </div>
+</div>
+<div *ngIf="!selectingCzasopismo">
+  {{ aktualneCzasopismo }}
+  <button
+    *ngFor="let rok of lataAktualnegoCzasopisma; let i = index"
+    (click)="selectAktualnyRok(rok)"
+  >
+    rok
+    {{ rok }}
+  </button>
+  <table *ngIf="aktualnyRok != ''">
+    <tr *ngFor="let wydanie of wydaniaCzasopismDoWyswietlenia">
+      <td>
+        <img
+          [src]="
+            'http://atarionline.pl/biblioteka/czasopisma/' +
+            aktualneCzasopismo +
+            '/' +
+            xml[aktualneCzasopismo][wydanie].miniaturka
+          "
+        />
+      </td>
+      <td>
+        format: <br />
+        {{ xml[aktualneCzasopismo][wydanie].format }} <br />
+        stron: <br />
+        {{ xml[aktualneCzasopismo][wydanie].stron }} <br />
+      </td>
+      <td>
+        nazwa: <br />
+        {{ xml[aktualneCzasopismo][wydanie].nazwa }} <br />
+        numer: <br />
+        {{ xml[aktualneCzasopismo][wydanie].numer }} <br />
+        wydawca: <br />
+        {{ xml[aktualneCzasopismo][wydanie].wydawca }} <br />
+      </td>
+      <td></td>
+    </tr>
+  </table>
+</div>
