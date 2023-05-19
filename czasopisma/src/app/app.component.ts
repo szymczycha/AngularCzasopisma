@@ -6,6 +6,20 @@ import * as xml2js from 'xml2js';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
+  deselectCzasopismo() {
+    this.selectingCzasopismo = true;
+    this.aktualneCzasopismo = "";
+    this.wydaniaCzasopismDoWyswietlenia = [];
+  }
+  getButtonColor(rok: string) {
+    if (rok == this.aktualnyRok) {
+      return "blue";
+    } else {
+      return "gray";
+    }
+  }
+  password: string = "";
+  dobreZarobki: boolean = false;
   wydaniaCzasopismDoWyswietlenia: string[] = [];
   title = 'czasopisma';
   xml: any;
@@ -20,11 +34,29 @@ export class AppComponent {
     this.lataAktualnegoCzasopisma =
       this.xml.lata[this.aktualneCzasopismo].split(',');
   }
+  validateKeystroke(e: KeyboardEvent) {
+    if (this.password + e.key == "666.666") {
+      this.dobreZarobki = true;
+    }
+    if (e.key == "Backspace") {
+      return true;
+    }
+    let numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
+    if (numbers.includes(e.key)) {
+      return true;
+    }
+    if (e.key == "." && this.password.split(".").length <= 2) {
+      return true;
+    }
+    return false;
+  }
+
   selectAktualnyRok(rok: string) {
     this.aktualnyRok = rok;
     this.wydaniaCzasopismDoWyswietlenia = [];
+
     Object.keys(this.xml[this.aktualneCzasopismo]).forEach(wydanieCzasopisma => {
-      if(this.xml[this.aktualneCzasopismo][wydanieCzasopisma].$.rok == this.aktualnyRok){
+      if (rok == "wszystkie" || this.xml[this.aktualneCzasopismo][wydanieCzasopisma].$.rok == this.aktualnyRok) {
         this.wydaniaCzasopismDoWyswietlenia.push(wydanieCzasopisma);
       }
     });

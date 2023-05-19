@@ -1,50 +1,78 @@
-<div *ngIf="selectingCzasopismo">
-  <div *ngFor="let czasopismo of czasopisma; let i = index">
-    <img
-      (click)="selectCzasopismo(czasopismo)"
-      [src]="
-        'http://atarionline.pl/biblioteka/czasopisma/img/' +
-        xml.zmienne[czasopismo].src
-      "
-    />
+<div *ngIf="!dobreZarobki">
+  Wpisz zarobki z poprzedniego roku
+  <input type="password" [(ngModel)]="password" (keydown)="validateKeystroke($event)"> EUR <br />
+  <div *ngIf="password.length > 0">
+    I tak widzimy, że Twoje zarobki to:
+    {{password | currency:"EUR":"symbol":"1.0-3"}}
   </div>
 </div>
-<div *ngIf="!selectingCzasopismo">
-  {{ aktualneCzasopismo }}
-  <button
-    *ngFor="let rok of lataAktualnegoCzasopisma; let i = index"
-    (click)="selectAktualnyRok(rok)"
-  >
-    rok
-    {{ rok }}
-  </button>
-  <table *ngIf="aktualnyRok != ''">
-    <tr *ngFor="let wydanie of wydaniaCzasopismDoWyswietlenia">
-      <td>
-        <img
-          [src]="
-            'http://atarionline.pl/biblioteka/czasopisma/' +
-            aktualneCzasopismo +
-            '/' +
-            xml[aktualneCzasopismo][wydanie].miniaturka
-          "
-        />
-      </td>
-      <td>
-        format: <br />
-        {{ xml[aktualneCzasopismo][wydanie].format }} <br />
-        stron: <br />
-        {{ xml[aktualneCzasopismo][wydanie].stron }} <br />
-      </td>
-      <td>
-        nazwa: <br />
-        {{ xml[aktualneCzasopismo][wydanie].nazwa }} <br />
-        numer: <br />
-        {{ xml[aktualneCzasopismo][wydanie].numer }} <br />
-        wydawca: <br />
-        {{ xml[aktualneCzasopismo][wydanie].wydawca }} <br />
-      </td>
-      <td></td>
-    </tr>
-  </table>
+<div *ngIf="dobreZarobki">
+  <div *ngIf="selectingCzasopismo">
+    <div *ngFor="let czasopismo of czasopisma; let i = index">
+      <img (click)="selectCzasopismo(czasopismo)" [src]="
+      'http://atarionline.pl/biblioteka/czasopisma/img/' +
+      xml.zmienne[czasopismo].src
+      " />
+    </div>
+  </div>
+  <div *ngIf="!selectingCzasopismo">
+    <button (click)="deselectCzasopismo()">Cofnij</button>
+    <button *ngFor="let rok of lataAktualnegoCzasopisma; let i = index" (click)="selectAktualnyRok(rok)"
+      [ngStyle]="{backgroundColor: getButtonColor(rok)}">
+      {{ rok }}
+    </button>
+    <button (click)="selectAktualnyRok('wszystkie')" [ngStyle]="{backgroundColor: getButtonColor('wszystkie')}">
+      wszystkie
+    </button>
+    <table *ngIf="aktualnyRok != ''">
+      <tr *ngFor="let wydanie of wydaniaCzasopismDoWyswietlenia">
+        <td>
+          <img [src]="
+        'http://atarionline.pl/biblioteka/czasopisma/' +
+        aktualneCzasopismo +
+        '/' +
+        xml[aktualneCzasopismo][wydanie].miniaturka
+        " />
+        </td>
+        <td>
+          format: <br />
+          <span class="bold">
+            {{ xml[aktualneCzasopismo][wydanie].format }} <br />
+          </span>
+          stron: <br />
+          <span class="bold">
+            {{ xml[aktualneCzasopismo][wydanie].stron }} <br />
+          </span>
+        </td>
+        <td>
+          nazwa: <br />
+          <span class="bold">
+            {{ xml[aktualneCzasopismo][wydanie].nazwa }} <br />
+          </span>
+          numer: <br />
+          <span class="bold">
+            {{ xml[aktualneCzasopismo][wydanie].numer }} <br />
+          </span>
+          wydawca: <br />
+          <span class="bold">
+            {{ xml[aktualneCzasopismo][wydanie].wydawca }} <br />
+          </span>
+        </td>
+        <td>
+          skan: <br />
+          <span class="bold">
+            {{ xml[aktualneCzasopismo][wydanie].skan }} <br />
+          </span>
+          przetworzenie: <br />
+          <span class="bold">
+            {{ xml[aktualneCzasopismo][wydanie].przetworzenie }} <br />
+          </span>
+          wyslal: <br />
+          <span class="bold">
+            {{ xml[aktualneCzasopismo][wydanie].podeslal }} <br />
+          </span>
+        </td>
+      </tr>
+    </table>
+  </div>
 </div>
